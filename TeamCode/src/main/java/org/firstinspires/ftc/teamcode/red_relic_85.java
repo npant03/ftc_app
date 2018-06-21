@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Util;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Func;
@@ -28,52 +29,6 @@ import java.util.Locale;
 @Autonomous(name = "red_relic_85", group = "Team5214")
 //@Disabled
 public class red_relic_85 extends LinearOpMode {
-//    private ElapsedTime runtime = new ElapsedTime();
-//    private DcMotor leftBack;
-//    private DcMotor rightBack;
-//    private DcMotor leftFront;
-//    private DcMotor rightFront;
-//
-//    private DcMotor liftMotor;
-//    private DcMotor relicMotor;
-//
-//    private DcMotor lBelt;
-//    private DcMotor rBelt;
-//
-//    private Servo colorServo;
-//    private Servo FLICKSERVO;
-//
-//
-//    private String colorid;
-//    // declare color sensor
-//    private ColorSensor colorFront;
-//
-//    private Servo rightDump;
-//    private Servo leftDump;
-//    private Servo centerDump;
-//    private Servo wrist;
-//    private Servo finger;
-//
-//    private Servo leftPush;
-//    private Servo rightPush;
-//
-//    private int ticks;
-//    private int position2move2;
-//    // The IMU sensor object
-//    BNO055IMU imu;
-//    VuforiaLocalizer vuforia;
-//
-//
-//    //use the two variables in two color sensors situation
-////    ColorSensor colorFront;
-////    ColorSensor colorBack;
-//
-//    final double currentRatio = 1.3; //ratio set for red/blue, for color id function
-//
-//    // State used for updating telemetry
-//    Orientation angles;
-//    Orientation angles2;
-//    Acceleration gravity;
 
     @Override
     public void runOpMode() {
@@ -252,7 +207,7 @@ public class red_relic_85 extends LinearOpMode {
 
                 arm(.15); // put arm down
 
-                sleep(1000);
+                UtilityFunctions.sleep(1000);
                 colorid = checkColor(colorFront, currentRatio);
 
                 telemetry.addLine(colorid);
@@ -264,7 +219,7 @@ public class red_relic_85 extends LinearOpMode {
                     FLICKSERVO(.8);
                 }
 
-                sleep(300);
+                UtilityFunctions.sleep(300);
                 FLICKSERVO.setPosition(.5);
 
                 arm(.68); // put arm up
@@ -273,7 +228,7 @@ public class red_relic_85 extends LinearOpMode {
                 rightPush.setPosition(.55);
 
                 RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-                sleep(1400);
+                UtilityFunctions.sleep(1400);
 
                 telemetry.addLine(vuMark.toString());
                 telemetry.update();
@@ -303,12 +258,12 @@ public class red_relic_85 extends LinearOpMode {
 
                     straightWithEncoder(.5, -1);
 
-                    sleep(200);
+                    UtilityFunctions.sleep(200);
 
                     centerDump.setPosition(.8);
                     leftDump.setPosition(.18);
 
-                    sleep(700);
+                    UtilityFunctions.sleep(700);
 
                     leftDump.setPosition(0.71);
 
@@ -346,12 +301,12 @@ public class red_relic_85 extends LinearOpMode {
 
                     straightWithEncoder(.5, -1);
 
-                    sleep(200);
+                    UtilityFunctions.sleep(200);
 
                     centerDump.setPosition(.8);
                     leftDump.setPosition(.18);
 
-                    sleep(700);
+                    UtilityFunctions.sleep(700);
 
                     leftDump.setPosition(0.71);
 
@@ -389,12 +344,12 @@ public class red_relic_85 extends LinearOpMode {
 
                     straightWithEncoder(.5, -1);
 
-                    sleep(200);
+                    UtilityFunctions.sleep(200);
 
                     centerDump.setPosition(.8);
                     leftDump.setPosition(.18);
 
-                    sleep(700);
+                    UtilityFunctions.sleep(700);
 
                     leftDump.setPosition(0.71);
 
@@ -433,12 +388,12 @@ public class red_relic_85 extends LinearOpMode {
 
                     straightWithEncoder(.5, -1);
 
-                    sleep(200);
+                    UtilityFunctions.sleep(200);
 
                     centerDump.setPosition(.8);
                     leftDump.setPosition(.18);
 
-                    sleep(700);
+                    UtilityFunctions.sleep(700);
 
                     leftDump.setPosition(0.71);
 
@@ -473,17 +428,6 @@ public class red_relic_85 extends LinearOpMode {
             }
         }
 
-        private void motorWithEncoder(DcMotor motorName, double power, int inches) {
-            ticks = (int) (inches * 1120 / (4 * 3.14159)); //converts inches to ticks
-//        telemetry.addData("ticks: ", ticks);
-            telemetry.update();
-
-            //modifies moveto position based on starting ticks position, keeps running tally
-            position2move2 = motorName.getCurrentPosition() + ticks;
-            motorName.setTargetPosition(position2move2);
-            motorName.setPower(power);
-
-        }
 
         //always keep strength positive, use negative inches to go backwards
         private void straightWithEncoder(double strength, int straightInches) {
@@ -494,10 +438,10 @@ public class red_relic_85 extends LinearOpMode {
             rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            motorWithEncoder(leftBack, strength, straightInches);
-            motorWithEncoder(leftFront, strength, straightInches);
-            motorWithEncoder(rightBack, strength, straightInches);
-            motorWithEncoder(rightFront, strength, straightInches);
+            UtilityFunctions.motorWithEncoder(leftBack, strength, straightInches);
+            UtilityFunctions.motorWithEncoder(leftFront, strength, straightInches);
+            UtilityFunctions.motorWithEncoder(rightBack, strength, straightInches);
+            UtilityFunctions.motorWithEncoder(rightFront, strength, straightInches);
 
             while (leftBack.isBusy() && leftFront.isBusy() && rightBack.isBusy() && rightFront.isBusy()) {
             }
@@ -529,10 +473,10 @@ public class red_relic_85 extends LinearOpMode {
             rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            motorWithEncoder(leftBack, unlimitedpower, -strafeInches);
-            motorWithEncoder(leftFront, unlimitedpower, strafeInches);
-            motorWithEncoder(rightBack, unlimitedpower, strafeInches);
-            motorWithEncoder(rightFront, unlimitedpower, -strafeInches);
+            UtilityFunctions.motorWithEncoder(leftBack, unlimitedpower, -strafeInches);
+            UtilityFunctions.motorWithEncoder(leftFront, unlimitedpower, strafeInches);
+            UtilityFunctions.motorWithEncoder(rightBack, unlimitedpower, strafeInches);
+            UtilityFunctions.motorWithEncoder(rightFront, unlimitedpower, -strafeInches);
 
             while (leftBack.isBusy() && leftFront.isBusy() && rightBack.isBusy() && rightFront.isBusy()) {
             }
@@ -777,15 +721,7 @@ public class red_relic_85 extends LinearOpMode {
             rightDump.setPosition(.5);
         }
 
-        private void sleep(int i) {
-            //initial time takes the current hardware time in milliseconds
-            long initial_time = System.currentTimeMillis();
-            //inside the while loop cpu will stop working when the input time is more than the time passed in this loop
-            //cpu will be back working when the loop reaches the target time
-            while (System.currentTimeMillis() - initial_time < i) {
 
-            }
-        }
 
         private void intake(DcMotor leftIntake, DcMotor rightIntake, String status) {
             leftIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
