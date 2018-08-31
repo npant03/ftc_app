@@ -162,10 +162,7 @@ abstract public class RelicRecoveryAutonomous extends LinearOpMode {
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        runToPosition();
     }
 
     protected void physicalStartingSequence() {
@@ -343,10 +340,7 @@ abstract public class RelicRecoveryAutonomous extends LinearOpMode {
     protected void straightWithEncoder(double strength, int straightInches) {
 
 
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        runToPosition();
 
         UtilityFunctions.motorWithEncoder(leftBack, strength, straightInches);
         UtilityFunctions.motorWithEncoder(leftFront, strength, straightInches);
@@ -356,32 +350,20 @@ abstract public class RelicRecoveryAutonomous extends LinearOpMode {
         while (leftBack.isBusy() && leftFront.isBusy() && rightBack.isBusy() && rightFront.isBusy()) {
         }
 
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-        leftFront.setPower(0);
-        rightFront.setPower(0);
+        killDriveTrainPower();
 
         //reset encoder values
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        resetEncoders();
 
         //put the motors back into a mode where they can run
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        runToPosition();
     }
 
 
     //defined so that power is positive always, right is positive inches, left is negative inches
     protected void strafeWithEncoder(double unlimitedpower, int strafeInches) {
 
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        runToPosition();
 
         UtilityFunctions.motorWithEncoder(leftBack, unlimitedpower, -strafeInches);
         UtilityFunctions.motorWithEncoder(leftFront, unlimitedpower, strafeInches);
@@ -391,20 +373,11 @@ abstract public class RelicRecoveryAutonomous extends LinearOpMode {
         while (leftBack.isBusy() && leftFront.isBusy() && rightBack.isBusy() && rightFront.isBusy()) {
         }
 
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-        leftFront.setPower(0);
-        rightFront.setPower(0);
+        killDriveTrainPower();
 
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        resetEncoders();
 
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        runToPosition();
     }
 
 
@@ -491,21 +464,18 @@ abstract public class RelicRecoveryAutonomous extends LinearOpMode {
 
     }
 
-    protected void turnLeftDegress(double deg, BNO055IMU.Parameters parametersMeth) {
+    protected void turnLeftDegrees(double deg, BNO055IMU.Parameters parametersMeth) {
 
 
-        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        runWithoutEncoder();
 
         Orientation agl = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double curent = Double.parseDouble(formatAngle(agl.angleUnit, agl.firstAngle));
-        double start = curent;
-        double stDeg = curent + deg;
+        double current = Double.parseDouble(formatAngle(agl.angleUnit, agl.firstAngle));
+        double start = current;
+        double stDeg = current + deg;
 
         //this loop runs until the robot has turned the correct amount
-        while (((curent) < (stDeg - 1.5)) || (curent > (stDeg + 1.5))) {
+        while (((current) < (stDeg - 1.5)) || (current > (stDeg + 1.5))) {
             telemetry.update();
 
             //prints all the variables
@@ -513,80 +483,66 @@ abstract public class RelicRecoveryAutonomous extends LinearOpMode {
             telemetry.addLine("start: " + Double.toString(start));
             telemetry.addLine("stDeg: " + Double.toString(stDeg));
             telemetry.addLine("deg: " + Double.toString(deg));
-            telemetry.addLine("current: " + Double.toString(curent));
+            telemetry.addLine("current: " + Double.toString(current));
 
             turn(.28);
 
             agl = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            curent = Double.parseDouble(formatAngle(agl.angleUnit, agl.firstAngle));
+            current = Double.parseDouble(formatAngle(agl.angleUnit, agl.firstAngle));
             telemetry.update();
         }
 
         telemetry.addLine("I LEFT THE WHILE");
         telemetry.update();
 
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-        leftFront.setPower(0);
-        rightFront.setPower(0);
+        killDriveTrainPower();
 
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        resetEncoders();
 
         imu.initialize(parametersMeth);
 
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        runToPosition();
     }
 
     protected void turnRightDegrees(double deg, BNO055IMU.Parameters parametersMeth) {
-        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        runWithoutEncoder();
 
         Orientation agl = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double curent = Double.parseDouble(formatAngle(agl.angleUnit, agl.firstAngle));
-        double start = curent;
-        double stDeg = curent + deg;
+        double current = Double.parseDouble(formatAngle(agl.angleUnit, agl.firstAngle));
+        double start = current;
+        double stDeg = current + deg;
 
         //this loop runs until the robot has turned the correct amount
-        while (((-curent) < (stDeg - 1.5)) || (-curent > (stDeg + 1.5))) {
+        while (((-current) < (stDeg - 1.5)) || (-current > (stDeg + 1.5))) {
             telemetry.update();
 
             //prints all the variables
-            telemetry.addLine("IM IN THE WHILE");
-            telemetry.addLine("start: " + Double.toString(start));
-            telemetry.addLine("stDeg: " + Double.toString(stDeg));
-            telemetry.addLine("deg: " + Double.toString(deg));
-            telemetry.addLine("current: " + Double.toString(curent));
+            printOnPhone("IM IN THE WHILE");
+            printOnPhone("start: " + Double.toString(start));
+            printOnPhone("stDeg: " + Double.toString(stDeg));
+            printOnPhone("deg: " + Double.toString(deg));
+            printOnPhone("current: " + Double.toString(current));
 
             turn(-.28);
 
             agl = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            curent = Double.parseDouble(formatAngle(agl.angleUnit, agl.firstAngle));
+            current = Double.parseDouble(formatAngle(agl.angleUnit, agl.firstAngle));
             telemetry.update();
         }
 
-        telemetry.addLine("I LEFT THE WHILE");
-        telemetry.update();
+        printOnPhone("I LEFT THE WHILE");
 
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-        leftFront.setPower(0);
-        rightFront.setPower(0);
+        killDriveTrainPower();
 
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        resetEncoders();
 
         imu.initialize(parametersMeth);
 
+        runToPosition();
+    }
+
+    protected void runToPosition() {
         leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -604,11 +560,6 @@ abstract public class RelicRecoveryAutonomous extends LinearOpMode {
         FLICKSERVO.setPosition(position);
         sleep(2000);
         FLICKSERVO.setPosition(0.5);
-
-    }
-
-    protected void FullDump() {
-
 
     }
 
