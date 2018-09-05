@@ -30,12 +30,12 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-abstract public class OurColorSensor{
+public class OurColorSensor{
 
    protected ColorSensor colorSensorName;
 
-   public OurColorSensor(ColorSensor sensor){
-        this.colorSensorName = sensor;
+   public OurColorSensor(){
+
    }
 
     protected String redOrBlue(double ratio) {

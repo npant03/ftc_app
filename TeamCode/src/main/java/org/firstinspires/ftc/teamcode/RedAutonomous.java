@@ -8,6 +8,8 @@ package org.firstinspires.ftc.teamcode;
 
 abstract public class RedAutonomous extends RelicRecoveryAutonomous{
 
+    OurColorSensor colorSensor = new OurColorSensor();
+
     @Override
     protected void knockBall(){
         knockBlueBall();
@@ -18,13 +20,13 @@ abstract public class RedAutonomous extends RelicRecoveryAutonomous{
         arm(.15); // put arm down
 
         UtilityFunctions.sleep(1000);
-        colorid = redOrBlue(colorFront, currentRatio);
+        colorid = colorSensor.redOrBlue(currentRatio);
 
         printOnPhone(colorid);
 
         if (colorid == "RED") {
             FLICKSERVO(0.2);
-        } else if (redOrBlue(colorFront, .4) == "BLUE") {
+        } else if (colorSensor.redOrBlue(.4) == "BLUE") {
             FLICKSERVO(.8);
         }
 
