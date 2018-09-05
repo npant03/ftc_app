@@ -604,19 +604,6 @@ abstract public class RelicRecoveryAutonomous extends LinearOpMode {
         }
     }
 
-    protected String checkColor(ColorSensor sensor, double ratio) {
-        double redOverBlue = (sensor.red() + 1) / (sensor.blue() + 1);
-        if (redOverBlue >= ratio) {
-            //if it is greater than ratio, it is red
-            return "RED";
-        } else if (redOverBlue <= ratio) {
-            //if it is less than ratio, it is blue
-            return "BLUE";
-        } else {
-            //if nothing is detected, return not defined
-            return "UNDEF";
-        }
-    }
 
     public String formatAngle(AngleUnit angleUnit, double angle) {
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));

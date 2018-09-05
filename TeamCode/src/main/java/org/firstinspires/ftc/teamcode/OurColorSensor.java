@@ -32,11 +32,27 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 
 abstract public class OurColorSensor{
 
-   //protected ColorSensor colorSensorName;
+   protected ColorSensor colorSensorName;
 
-   public OurColorSensor(ColorSensor colorSensorName){
-        this.colorSensorName = colorSensorName;
+   public OurColorSensor(ColorSensor sensor){
+        this.colorSensorName = sensor;
    }
+
+    protected String redOrBlue(double ratio) {
+        double redOverBlue = (colorSensorName.red() + 1) / (colorSensorName.blue() + 1);
+        if (redOverBlue >= ratio) {
+            //if it is greater than ratio, it is red
+            return "RED";
+        } else if (redOverBlue <= ratio) {
+            //if it is less than ratio, it is blue
+            return "BLUE";
+        } else {
+            //if nothing is detected, return not defined
+            return "UNDEF";
+        }
+    }
+
+
 
 
 

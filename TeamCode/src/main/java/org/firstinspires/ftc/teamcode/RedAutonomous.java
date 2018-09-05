@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
 /**
  * Created by nehapant on 6/24/18.
  */
@@ -21,13 +18,13 @@ abstract public class RedAutonomous extends RelicRecoveryAutonomous{
         arm(.15); // put arm down
 
         UtilityFunctions.sleep(1000);
-        colorid = checkColor(colorFront, currentRatio);
+        colorid = redOrBlue(colorFront, currentRatio);
 
         printOnPhone(colorid);
 
         if (colorid == "RED") {
             FLICKSERVO(0.2);
-        } else if (checkColor(colorFront, .4) == "BLUE") {
+        } else if (redOrBlue(colorFront, .4) == "BLUE") {
             FLICKSERVO(.8);
         }
 
