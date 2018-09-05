@@ -28,10 +28,11 @@
  */
 
 package org.firstinspires.ftc.teamcode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-public class OurColorSensor{
 
+public class OurColorSensor
    protected ColorSensor colorSensorName;
 
    public OurColorSensor(){
@@ -50,6 +51,10 @@ public class OurColorSensor{
             //if nothing is detected, return not defined
             return "UNDEF";
         }
+    }
+
+    protected void hardwareMap(String deviceName){
+        colorSensorName = hardwareMap.get(ColorSensor.class, deviceName)
     }
 
 

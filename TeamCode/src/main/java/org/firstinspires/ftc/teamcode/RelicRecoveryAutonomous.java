@@ -45,7 +45,7 @@ abstract public class RelicRecoveryAutonomous extends LinearOpMode {
 
     protected String colorid;
     // declare color sensor
-    protected ColorSensor colorFront;
+    //protected ColorSensor colorFront;
 
     protected Servo rightDump;
     protected Servo leftDump;
