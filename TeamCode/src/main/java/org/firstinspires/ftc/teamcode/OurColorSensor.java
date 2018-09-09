@@ -32,7 +32,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
-public class OurColorSensor
+public class OurColorSensor{
    protected ColorSensor colorSensorName;
 
    public OurColorSensor(){
@@ -54,7 +54,7 @@ public class OurColorSensor
     }
 
     protected void hardwareMap(String deviceName){
-        colorSensorName = hardwareMap.get(ColorSensor.class, deviceName)
+        colorSensorName = hardwareMap.get(ColorSensor.class, deviceName);
     }
 
 
