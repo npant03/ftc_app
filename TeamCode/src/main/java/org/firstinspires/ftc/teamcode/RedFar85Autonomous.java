@@ -38,5 +38,12 @@ public class RedFar85Autonomous extends RedAutonomous{
         getToLeftDumpPosition();
     }
 
+    @Override
 
+    public void runOpMode(){
+        initialize();
+        while(opModeIsActive()){
+            Run();
+        }
+    }
 }
